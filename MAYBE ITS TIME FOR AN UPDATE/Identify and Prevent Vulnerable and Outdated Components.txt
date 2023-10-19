@@ -18,5 +18,39 @@ Failure to properly review, assess, and vet these many components may take your 
 
 In the following exercises, we’ll explore an example of how serious vulnerable and outdated components can be, how to test for some of them, and how to report on the findings properly.
 
--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+* Assessing Vulnerable and Outdated Components
+----------------------------------------------
+As an internal penetration tester for Acme Org, you perform security assessments and recommend ways to better secure company systems and applications. Given Acme’s dedication to security, 
+you are also part of their software development life cycle!
+
+Recently, you’ve been tasked with performing an assessment on a static website that is still in development. This site will act as a landing page for a new service Acme Org will be 
+offering. Despite the lack of dynamic content, internal development policies require you to review the application. While it is in staging, the software stack will be identical in 
+production, assuming you have no security recommendations.
+
+The site is currently hosted at staging-dev.acmeco.org.
+
+* Instructions
+--------------
+To begin, let’s run a basic CURL command to retrieve the HTTP headers. As we can see on OWASP’s site, certain HTTP Headers may provide valuable information. Let’s run the following 
+command:
+
+	curl -verbose http://staging-dev.acmeco.org/welcome.php
+
+With the -verbose argument, we can retrieve the HTTP body and the headers.
+
+With the headers in hand, let’s compare the returned headers with those provided by OWASP. Two headers, in particular, should stand out. In our case, the “Server” and “X-Powered-By” 
+headers provide software versions.
+
+If we start with the Server header, we can see it runs Apache version 2.4.55. A quick google search of this finds it to be the latest version of Apache, and while some vulnerabilities may 
+impact this version, they are low in severity.
+
+Moving to the X-Powered-By header, the system runs PHP version 8.1.0-dev. Another quick google search of this finds something interesting. On March 28, 2021, a backdoor was uncovered 
+within this PHP version! If our system runs this version, that is a potentially serious issue!
+
+In the next exercise, let’s exploit this finding and validate the issue again using CURL.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
