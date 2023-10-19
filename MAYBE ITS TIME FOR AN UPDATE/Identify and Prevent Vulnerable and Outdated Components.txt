@@ -150,4 +150,22 @@ uid=1000(staging) gid=1000(staging) groups=1000(staging)
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+* Conclusion
+------------
+In the previous exercises, we explored how vulnerable components can severely impact our applications, even when working with something as simple as a static site.
+
+To ensure our application is as secure as possible, we need to review all components of our applications carefully. As we saw in our example, certain software components may be exposed 
+directly to users by the system. However, other areas may be hidden away and abstracted.
+
+Developers should ensure that when using third-party libraries and applications, they properly vet and review those libraries for known issues and embedded libraries within them. No 
+example has better highlighted the potential issues of ignoring embedded libraries than the recent Log4J issue.
+
+While many developers properly reviewed the libraries they used, some failed to perform deeper reviews. Because of this, development teams across the world inadvertently introduced 
+serious vulnerabilities within their applications that they had no real visibility into.
+
+Before using any libraries or components, it’s important that teams perform a deep dive into their desired tools to ensure they aren’t introducing any unwanted risk into their systems. 
+Certain sites like sonatype may help developers identify these dependencies.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
