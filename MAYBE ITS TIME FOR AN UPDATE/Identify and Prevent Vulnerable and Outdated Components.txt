@@ -1,0 +1,22 @@
+# IDENTIFY AND PREVENT VULNERABLE AND OUTDATED COMPONENTS
+---------------------------------------------------------
+
+* Introduction
+--------------
+The following example will explore how serious Vulnerable and Outdated Components can be to our application.
+
+When developing a secure application, we must consider our choices when writing our code. We need to be careful regarding what functions we use, how we implement code logic, and how we 
+allow users to interact with the application.
+
+But even if our code is written perfectly, there are still areas an attacker could take advantage of. For example, what happens if a library we decided to use has a vulnerability within 
+it? Despite our best efforts, code written by another developer, designed to help abstract out complexity and improve our development time, may negatively impact system security.
+
+When we develop and implement our applications, we must be aware of all components that interact with our code. This includes the server software feeding requests to our code, any 
+intermediary proxies, the language and versions we use, the code libraries we import, and more.
+
+Failure to properly review, assess, and vet these many components may take your secure code and introduce serious vulnerabilities to the application.
+
+In the following exercises, we’ll explore an example of how serious vulnerable and outdated components can be, how to test for some of them, and how to report on the findings properly.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
